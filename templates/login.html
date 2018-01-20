@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1>LaunchCode Demo Signup Form</h1>
+<form action="/login" method="post">
+    <fieldset>
+        <legend>Login</legend>
+        <label for="user">Email</label>
+        <br />
+        <div class="input1">
+                <input type="text" name="email" value="{{email}}" required="required" id="user">
+        </div> 
+        <!-- <br>     -->
+        <label for="pass">Password</label><br />
+        <div class="input1">
+                <input type="password" name="password" required="required" id="pass">
+        </div>
+        <input type="submit" value="login">
+    </fieldset>
+    <a href="/register">Register</a>
+</form>
+
+{% endblock %}   
