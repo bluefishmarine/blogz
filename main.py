@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session,flash
 from flask_sqlalchemy import SQLAlchemy
-# from models import db, Blog, User
+from validator import Validator
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:werto5678@localho
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = "sjfh576b929%&#fj"
+
 
 class Blog(db.Model):
 
@@ -28,11 +29,9 @@ class User(db.Model):
     password = db.Column(db.String(120))
     blogs = db.relationship("Blog", backref="owner")
 
-    def __init__(self,email,password):
-        self.email = email
+    def __init__(self,name,password):
+        self.email = name
         self.password = password
-
-
 
 @app.route('/')
 def index():
@@ -40,45 +39,53 @@ def index():
 
 @app.route("/register",methods=['GET',"POST"])
 def register(): 
+    validator = Validator()
     if request.method == 'POST':
-        email = request.form["email"]
+        name = request.form["name"]
         password = request.form['password']
         verify = request.form["passwordv"]    
-        existing_user = User.query.filter_by(email=email).first()        
+        existing_user = User.query.filter_by(email=name).first()        
         #todo - validate user data
+        validator.validate_input(name,password,verify)
+        if validator.errors["contains_error"]:
+            return render_template("register.html", name=name, errors=validator.errors)
+
 
         if not existing_user:
-            new_user = User(email,password)    
+            new_user = User(name,password)    
             db.session.add(new_user)
             db.session.commit()
             # Remember User
-            return redirect("/")
+            session['name'] = name
+            return redirect("/new")
         else:
             #todo - use better response
-            return "<h1>Duplicate User</h1>"
+            flash("User already exists")
+            return redirect("/register")
 
-    return render_template("register.html")
+    return render_template("register.html",errors=validator.errors)
 
 @app.route("/login", methods=['GET','POST'])
 def login():
 
     if request.method == 'POST':
-        email = request.form['email']
+        name = request.form['name']
         password = request.form['password']
-        user = User.query.filter_by(email = email).first()
+        user = User.query.filter_by(email = name).first()
         if user and user.password == password: 
-            session['email'] = email
+            session['name'] = name
             flash("Logged in") 
-            return redirect("/")
+            return redirect("/new")
         else:
             #Why Login failed
             flash("Username or password incorrect", 'error')
+            return redirect("/login")
 
     return render_template("login.html")
 
 @app.route("/logout")
 def logout():
-    del session["email"]
+    del session["name"]
     return redirect("/")
 
 

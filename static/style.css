@@ -39,6 +39,10 @@ article p{
 	background-color: rgb(220, 223, 229);
 }
 
+.error{
+	color: red;
+}
+
 footer{
 	text-align: center;
 	background-color: rgb(220, 223, 229);

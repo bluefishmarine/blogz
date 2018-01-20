@@ -1,24 +1,33 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h1>LaunchCode Demo Signup Form</h1>
+<h1>Sign Up</h1>
 <form action="/register" method="post">
     <fieldset>
-        <legend>Signup</legend>
-        <label for="email">Email</label><br />
+        <legend>Sign Up</legend>
+        <label for="username">Username</label><br />
             <div class="input1">
-                <input type="text" name="email" id="email" value="{{email}}">
-            </div>  
+                <input type="text" name="name" id="username" value="{{name}}">
+            </div>
+            {% if errors['error_name'] %}
+                <p class="error">{{ errors['error_name'] }}</p>
+            {% endif %}  
         <!-- <br>     -->
         <label for="pass">Password</label><br />
         <div class="input1">
                 <input type="password" name="password" required="required" id="pass">
         </div>
+        {% if errors['error_password'] %}
+            <p class="error">{{ errors['error_password'] }}</p>
+        {% endif %}
         <!-- <br> -->
         <label for="passv">Verify Password</label><br />
         <div class="input1">
                 <input type="password" name="passwordv" required="required" id="passv">
         </div>
+        {% if errors['error_match'] %}
+            <p class="error">{{ errors['error_match'] }}</p>
+        {% endif %}
         <input type="submit" value="register">
     </fieldset>
 </form>
