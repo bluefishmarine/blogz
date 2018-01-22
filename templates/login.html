@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h1>LaunchCode Demo Signup Form</h1>
+<h1>Login</h1>
 <form action="/login" method="post">
     <fieldset>
         <legend>Login</legend>
@@ -17,7 +17,7 @@
         </div>
         <input type="submit" value="login">
     </fieldset>
-    <a href="/register">Register</a>
+    <span>Don't Have an account?&nbsp;&nbsp;</span><a href="/register">Register Here</a>
 </form>
 
 {% endblock %}   

@@ -1,16 +1,20 @@
 {% extends 'index.html' %}
 
 
+
 {% block content %}
 
+<h1>All Posts by {{user.email}}</h1>
+
+{% for blog in blogs %}
 <article>
     <div class="item">
         <h3><a href="/blog?id={{blog.id}}">{{blog.title}}</a></h3>
         <p>&nbsp;&nbsp;{{blog.body}}</p>
     </div>
-    <p>Written by <a href="/blog?user={{blog.owner.id}}">{{blog.owner.email}}</a></p>
+    <p>Written by <a href="/blog?user={{user.id}}">{{user.email}}</a></p>
 </article>
-
+{% endfor %}
 
 
 {% endblock %}

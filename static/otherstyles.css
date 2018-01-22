@@ -1,0 +1,124 @@
+html{
+    width:100%;
+  }
+  
+  body{
+    width:100%;
+  }
+  
+  #page{
+    width:98%;
+    margin: 0 auto;
+  }
+  
+  /********************************/
+  
+  /**********Header*************/
+  /*****************************/
+  header{
+    text-align: center;
+  }
+  
+  #banner {
+    background-color: rgba(219, 213, 239,1);
+    padding: 30px;
+    max-width: 80%;
+    height: 200px;
+    margin: 0 auto;
+    font-size: 5em;
+    background-image: url("http://i63.tinypic.com/259bwiw.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    color: rgba(217, 217, 217,1);
+  }
+  /**********Nav Bar************/
+  /*****************************/
+  header nav {
+    background-color: rgba(26, 26, 26,1);
+    max-width: 84.2%;
+    margin: 0 auto;
+    overflow: auto;
+  }
+  
+  #links a:hover{
+    background-color: rgba(239, 199, 155,1);
+    color: rgba(0,0,0,1);
+    text-decoration: none;
+  }
+  
+  header li {
+    float: left;
+    list-style-type: none;
+    margin: 0 5px;
+  }
+  
+  header ul{
+    width: inherit;
+    margin: 0 auto;
+  }
+  
+  #links a{
+    display: block;
+    padding: 10px;
+    color: rgba(217, 217, 217,1);
+    text-decoration: none;
+  }
+  
+  #logged{
+    float:right;
+  }
+  #logged a{
+    display: inline;
+  }
+  /*********************/
+  
+  
+  /********Content************/
+  /****************************/
+  #content{
+    margin: 100px 0 400px 100px;
+  }
+  
+  #articles{
+    float:left;
+    margin: 0;
+    padding: 0;
+    max-width: 72%;
+  }
+  
+  article{
+    width: 90%;
+    margin-left: 45px;
+    background-color: rgba(242, 242, 242,1);
+  }
+  
+  
+  aside{
+    width: 200px;
+    border-style: solid;
+    float: left;
+    background-color: rgba(242, 242, 242,1);
+    margin-left: 30px;
+  }
+  
+  aside li{
+    list-style-type: none;
+  }
+  
+  aside h4{
+    margin-left: 5px;
+  }
+  
+  
+  /*************************/
+  /*************************/
+  
+  /*********footer**********/
+  
+  footer{
+    clear: left;
+    text-align: center;
+  }
+  
+  
+  

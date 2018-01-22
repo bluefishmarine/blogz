@@ -1,6 +1,8 @@
 from flask import Flask, request, redirect, render_template, session,flash
 from flask_sqlalchemy import SQLAlchemy
 from validator import Validator
+# from models import db,Blog,User
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -8,7 +10,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:werto5678@localho
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = "sjfh576b929%&#fj"
-
 
 class Blog(db.Model):
 
@@ -29,13 +30,21 @@ class User(db.Model):
     password = db.Column(db.String(120))
     blogs = db.relationship("Blog", backref="owner")
 
-    def __init__(self,name,password):
-        self.email = name
+    def __init__(self,email,password):
+        self.email = email
         self.password = password
+
+@app.before_request
+def require_login():
+    allowed_routes = ['login','register','index','blog']
+    if request.endpoint not in allowed_routes and "name" not in session:  
+        return redirect("/login") 
+
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    users = User.query.all()
+    return render_template('home.html',users=users)
 
 @app.route("/register",methods=['GET',"POST"])
 def register(): 
@@ -57,6 +66,7 @@ def register():
             db.session.commit()
             # Remember User
             session['name'] = name
+            session['id'] = new_user.id
             return redirect("/new")
         else:
             #todo - use better response
@@ -74,6 +84,7 @@ def login():
         user = User.query.filter_by(email = name).first()
         if user and user.password == password: 
             session['name'] = name
+            session['id'] = user.id
             flash("Logged in") 
             return redirect("/new")
         else:
@@ -86,27 +97,34 @@ def login():
 @app.route("/logout")
 def logout():
     del session["name"]
-    return redirect("/")
+    del session['id'] 
+    return redirect("/blog")
 
 
 @app.route('/blog', methods = ['GET'])
 def blog():
     if request.args:
-        id = int(request.args.get("id"))   
-        blog = Blog.query.filter_by(id = id).first()
-        print (blog)
-        return render_template("article.html", blog=blog)
-
+        if request.args.get("id"):
+            id = int(request.args.get("id"))   
+            blog = Blog.query.filter_by(id = id).first()
+            return render_template("article.html", blog=blog)
+        userID = int(request.args.get("user"))
+        user = User.query.filter_by(id = userID).first()
+        blogs = Blog.query.filter_by(user_id = userID).all()
+        return render_template("userposts.html", blogs=blogs, user=user)     
     blogs = Blog.query.all()
     return render_template('blogs.html',blogs = blogs)
 
 @app.route("/new", methods=['GET','POST'])
 def new_post():
 
+    name = session['name']
+    user = User.query.filter_by(email = name).first()
+
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
-        post = Blog(title,body)
+        post = Blog(title,body,user)
         db.session.add(post)
         db.session.commit()
         id = post.id    
