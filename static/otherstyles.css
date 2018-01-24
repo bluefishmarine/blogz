@@ -63,12 +63,21 @@ html{
     color: rgba(217, 217, 217,1);
     text-decoration: none;
   }
+
+  .noUser{
+    float:right;
+  }
   
   #logged{
+    margin-top: 10px;
     float:right;
   }
   #logged a{
     display: inline;
+  }
+
+  #logged span{
+    color: white;
   }
   /*********************/
   
@@ -96,9 +105,9 @@ html{
   aside{
     width: 200px;
     border-style: solid;
-    float: left;
+    float: right;
     background-color: rgba(242, 242, 242,1);
-    margin-left: 30px;
+    margin-right: 150px;
   }
   
   aside li{

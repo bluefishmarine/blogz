@@ -9,9 +9,9 @@
         <title>{{title}}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='../static/normalize.css') }}">
-        <link rel="stylesheet" rel="stylesheet" href="{{ url_for('static',filename='../static/style.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='../static/otherstyles.css') }}">  
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='normalize.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='otherstyles.css') }}">  
     </head>
     <body>
             <div id="page">
@@ -24,12 +24,12 @@
                                 <li><a href="/blog">View Posts</a></li>
                                 <li><a href="/new">Create New Post</a></li>
                                 <li><a href="/logout">Logout</a></li>
-                                <li id="logged">Logged in as <a href="/blog?user={{session['id']}}">{{session['name']}}</a></li>
+                                <li id="logged"><span>Logged in as</span><a href="/blog?user={{session['id']}}">{{session['name']}}</a></li>
                                 {% else %}
                                 <li><a href="/">Home</a></li>
                                 <li><a href="/blog">View Posts</a></li>
-                                <li><a href="/login">Login</a></li>
-                                <li><a href="/register">Register</a></li>
+                                <li class="noUser"><a href="/login">Login</a></li>
+                                <li class="noUser"><a href="/register">Register</a></li>
                                 {% endif %}  
                           </ul>
                       </nav>
@@ -45,8 +45,31 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-        {% block content %}
-        {% endblock %}      
+        <div id="content">    
+            <aside>
+                    <h4>Fun Links</h4>
+                    <ul>
+                      <li><a href="#">Link 1</a></li>
+                      <li><a href="#">Link 2</a></li>
+                      <li><a href="#">Link 3</a></li>
+                    </ul>
+                      <h4>Archive</h4>
+                    <ul>
+                      <li><a href="#">January</a></li>
+                      <li><a href="#">February</a></li>
+                      <li><a href="#">March</a></li>
+                      <li><a href="#">April</a></li>
+                      <li><a href="#">May</a></li>
+                      <li><a href="#">June</a></li>
+                      <li><a href="#">July</a></li>
+                      <li><a href="#">August</a></li>
+                      <li><a href="#">September</a></li>
+                      <li><a href="#">October</a></li>
+                      <li><a href="#">November</a></li>
+                    </ul>
+                  </aside>
+                  {% block content %}
+                  {% endblock %}    
+        </div> 
     </body>
 </html>
