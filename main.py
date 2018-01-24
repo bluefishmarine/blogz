@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session,flash
 from flask_sqlalchemy import SQLAlchemy
 from validator import Validator
-
+from hash import make_pw_hash, check_pw_hash
 
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def register():
 
 
         if not existing_user:
-            new_user = User(name,password)    
+            new_user = User(name,make_pw_hash(password))    
             db.session.add(new_user)
             db.session.commit()
             # Remember User
@@ -62,7 +62,7 @@ def login():
         name = request.form['name']
         password = request.form['password']
         user = User.query.filter_by(email = name).first()
-        if user and user.password == password: 
+        if user and user.password == make_pw_hash(password): 
             session['name'] = name
             session['id'] = user.id
             flash("Logged in") 
