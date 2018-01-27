@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 # db = SQLAlchemy(app)
 app.secret_key = "sjfh576b929%&#fj"
 
-from models import db, Blog, User
+from models import db, Blog, User, Comment
 
 
 @app.route('/')
@@ -87,13 +87,26 @@ def blog():
         if request.args.get("id"):
             id = int(request.args.get("id"))   
             blog = Blog.query.filter_by(id = id).first()
-            return render_template("article.html", blog=blog)
+            comments = Comment.query.filter_by(blog_id = id).all()
+            return render_template("article.html", blog=blog,comments = comments)
         userID = int(request.args.get("user"))
         user = User.query.filter_by(id = userID).first()
         blogs = Blog.query.filter_by(user_id = userID).all()
         return render_template("userposts.html", blogs=blogs, user=user)     
     blogs = Blog.query.all()
     return render_template('blogs.html',blogs = blogs)
+
+@app.route('/addComment', methods = ['POST'])
+def addComment():
+    name = session['name']
+    user = User.query.filter_by(email = name).first()
+    blog_id = request.form['blogid']
+    blog = Blog.query.filter_by(id = blog_id).first()
+    content = request.form['body']
+    newComment = Comment(content,user,blog)
+    db.session.add(newComment)
+    db.session.commit()
+    return redirect("/blog?id={0}".format(blog_id))
 
 @app.route("/new", methods=['GET','POST'])
 def new_post():
