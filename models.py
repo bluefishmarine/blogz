@@ -10,6 +10,7 @@ class Blog(db.Model):
     title = db.Column(db.String(120))
     body = db.Column(db.String(2000))
     pub_date = db.Column(db.DateTime)
+    active = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship("Comment", backref="blog")
 
@@ -17,6 +18,7 @@ class Blog(db.Model):
         self.title = title
         self.body = body
         self.owner = user
+        self.active = True
         if pub_date is None:
             pub_date = datetime.utcnow()
         self.pub_date = pub_date

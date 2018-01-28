@@ -51,9 +51,17 @@ def register():
 
 @app.before_request
 def require_login():
-    not_allowed_routes = ['new']
-    if request.endpoint in not_allowed_routes and "name" not in session:  
+    not_allowed_routes = ['new','addComment','edit']
+    if request.endpoint in not_allowed_routes and "name" not in session:
         return redirect('/login')
+    if request.endpoint in not_allowed_routes:
+        if request.args and request.args.get('id'):
+            id = request.args.get('id')
+            blog_user = (Blog.query.filter_by(id = id).first()).owner.email
+            if not(blog_user == session['name']):
+                return ("You do not have permission to do that")
+              
+        
 
 @app.route("/login", methods=['GET','POST'])
 def login():
@@ -91,10 +99,37 @@ def blog():
             return render_template("article.html", blog=blog,comments = comments)
         userID = int(request.args.get("user"))
         user = User.query.filter_by(id = userID).first()
-        blogs = Blog.query.filter_by(user_id = userID).all()
+        blogs = Blog.query.filter_by(user_id = userID,active=True).all()
         return render_template("userposts.html", blogs=blogs, user=user)     
-    blogs = Blog.query.all()
+    blogs = Blog.query.filter_by(active=True).all()
     return render_template('blogs.html',blogs = blogs)
+
+@app.route('/edit', methods = ['GET','POST'])
+def edit():
+    name = session['name']
+    user = User.query.filter_by(email = name).first()
+    blog_id = request.args.get('id')
+    blog = Blog.query.filter_by(id = blog_id).first()
+    if request.method == 'POST':
+        blogID = request.form['blogid']
+        blog = Blog.query.filter_by(id = blogID).first()
+        title = request.form['title']
+        body = request.form['body']
+        blog.title = title
+        blog.body = body
+        db.session.commit()   
+        return redirect("/blog?id={0}".format(blogID))
+    return render_template('edit.html',blog=blog)
+
+@app.route('/deletePost', methods = ['POST'])
+def deletePost():
+    name = session['name']
+    user = User.query.filter_by(email = name).first()
+    blog_id = request.form['blogid']
+    blog = Blog.query.filter_by(id = blog_id).first()
+    blog.active = False
+    db.session.commit()
+    return redirect("/blog?user={0}".format(user.id))
 
 @app.route('/addComment', methods = ['POST'])
 def addComment():

@@ -9,6 +9,13 @@
         <p>&nbsp;&nbsp;{{blog.body}}</p>
     </div>
     <p>Written by <a href="/blog?user={{blog.owner.id}}">{{blog.owner.email}}</a></p>
+    {% if "name" in session and session['name'] == blog.owner.email %}
+        <span><a href="/edit?id={{blog.id}}">Edit</a></span>
+        <form action="/deletePost" method="POST" style = "display: inline-block;">
+            <input type="hidden" name="blogid" value="{{blog.id}}"/>
+            <input type="submit" value="Delete"/>
+        </form>
+    {% endif %}
 </article>
 <section>
     <h3>Comments</h3>

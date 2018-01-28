@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+
+
+{% block content %}
+
+    <a href="/">Back</a>
+    <h1>Edit Post</h1>
+    <form action="/edit" method="post">
+        <fieldset>
+            <legend>Edit Your Post</legend>
+            <label for="title">title</label><br />
+                <div class="input1">
+                    <input type="text" name="title" id="title" value="{{blog.title}}">
+                </div>  
+            <br>    
+            <div class="input1">
+                <textarea name="body" id="body" cols="100" rows="10">{{blog.body}}</textarea>
+                <input name="blogid" type="hidden" value={{blog.id}} />
+            </div>
+            <input type="submit" value="enter">
+        </fieldset>
+    </form>
+
+
+
+
+{% endblock %} 
